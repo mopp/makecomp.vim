@@ -18,15 +18,20 @@ set cpo&vim
 
 function! makecomp#get_make_argument(arg_lead, cmd_line, cursor_pos)
     let fname = getcwd() . '/Makefile'
-    echomsg 'filename is '.fname
 
     if !filereadable(fname)
         echoerr 'Makefile is NOT exist.'
         return
     endif
 
-    let makefile = filter(readfile(fname), "(v:val !~? '^.*=.*$') && (v:val =~? '^.*:.*$') && (v:val !~? '^[.#].*$')")
-    return map(makefile, "substitute(v:val, '[[:space:]	]*:.*$', '', '')")
+    let cmdlist = filter(readfile(fname), "(v:val !~? '^.*=.*$') && (v:val =~? '^.*:.*$') && (v:val !~? '^[.#].*$')")
+    let cmdlist = map(cmdlist, "substitute(v:val, '[[:space:]	]*:.*$', '', '')")
+
+    if a:arg_lead != ''
+        let cmdlist = filter(cmdlist, "v:val =~? '^" . a:arg_lead . ".*'")
+    endif
+
+    return cmdlist
 endfunction
 
 
