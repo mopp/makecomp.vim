@@ -21,7 +21,7 @@ function! makecomp#get_make_argument(arg_lead, cmd_line, cursor_pos)
 
     if !filereadable(fname)
         echoerr 'Makefile is NOT exist.'
-        return
+        return []
     endif
 
     let cmdlist = filter(readfile(fname), "(v:val !~? '^.*=.*$') && (v:val =~? '^.*:.*$') && (v:val !~? '^[.#].*$')")
